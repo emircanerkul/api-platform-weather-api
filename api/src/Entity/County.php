@@ -7,24 +7,32 @@ use App\Repository\CountyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CountyRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['county:read']],
+    denormalizationContext: ['groups' => ['county:write']],
+)]
 class County
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['county:read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['county:read', 'county:write'])]
     private $title;
 
     #[ORM\ManyToOne(targetEntity: City::class, inversedBy: 'counties')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['county:read'])]
     private $city;
 
     #[ORM\OneToMany(mappedBy: 'county', targetEntity: Weather::class)]
+    #[Groups(['county:read'])]
     private $weather;
 
     public function __construct()

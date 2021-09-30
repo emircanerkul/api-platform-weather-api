@@ -7,23 +7,33 @@ use App\Repository\CityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: CityRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['city:read']],
+    denormalizationContext: ['groups' => ['city:write']],
+)]
 class City
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['city:read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[NotBlank()]
+    #[Groups(['city:read', 'city:write'])]
     private $title;
 
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: County::class)]
+    #[Groups(['city:read'])]
     private $counties;
 
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Weather::class)]
+    #[Groups(['city:read'])]
     private $weather;
 
     public function __construct()

@@ -11,26 +11,36 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Email;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:write']],
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id, ORM\GeneratedValue(strategy: 'CUSTOM'), ORM\CustomIdGenerator(class: UuidGenerator::class)]
     #[ORM\Column(type: 'uuid', unique: true)]
+    #[Groups(['user:read'])]
     private ?UuidInterface $id = null;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Email()]
+    #[Groups(['user:read', 'user:write'])]
     private ?string $email = null;
 
     /**
      * The hashed password.
      */
     #[ORM\Column(type: 'string')]
+    #[Groups(['user:write'])]
     private ?string $password = null;
 
     #[ORM\Column(type: 'json')]
+    #[Groups(['user:read', 'user:write'])]
     private array $roles = [];
 
     public function getId(): ?UuidInterface

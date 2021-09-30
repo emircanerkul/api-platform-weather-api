@@ -5,41 +5,54 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\WeatherRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WeatherRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['weather:read']],
+    denormalizationContext: ['groups' => ['weather:write']],
+)]
 class Weather
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['weather:read'])]
     private $id;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['weather:read', 'weather:write'])]
     private $lon;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['weather:read', 'weather:write'])]
     private $lat;
 
     #[ORM\Column(type: 'string', length: 64)]
+    #[Groups(['weather:read', 'weather:write'])]
     private $weather;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['weather:read', 'weather:write'])]
     private $temp;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['weather:read', 'weather:write'])]
     private $name;
 
     #[ORM\ManyToOne(targetEntity: City::class, inversedBy: 'weather')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['weather:read'])]
     private $city;
 
     #[ORM\ManyToOne(targetEntity: County::class, inversedBy: 'weather')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['weather:read'])]
     private $county;
 
     #[ORM\ManyToOne(targetEntity: WeatherStatus::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['weather:read', 'weather:write'])]
     private $status;
 
     public function getId(): ?int
