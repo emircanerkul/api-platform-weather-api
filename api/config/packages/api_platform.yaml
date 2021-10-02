@@ -2,15 +2,29 @@ api_platform:
     title: Hello API Platform
     version: 1.0.0
     mapping:
-        paths: ['%kernel.project_dir%/src/Entity']
+        paths: ["%kernel.project_dir%/src/Entity"]
+    formats:
+        jsonld: ["application/ld+json"]
+        jsonhal: ["application/hal+json"]
+        jsonapi: ["application/vnd.api+json"]
+        json: ["application/json"]
+        xml: ["application/xml", "text/xml"]
+        yaml: ["application/x-yaml"]
+        csv: ["text/csv"]
+        html: ["text/html"]
     patch_formats:
-        json: ['application/merge-patch+json']
+        json: ["application/merge-patch+json"]
+        jsonapi: ["application/vnd.api+json"]
     swagger:
-        versions: [3]
+        versions: [3, 2]
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header
     # Mercure integration, remove if unwanted
     mercure: ~
     # Good cache defaults for REST APIs
     defaults:
         stateless: true
         cache_headers:
-            vary: ['Content-Type', 'Authorization', 'Origin']
+            vary: ["Content-Type", "Authorization", "Origin"]
