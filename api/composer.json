@@ -36,6 +36,7 @@
     },
     "require-dev": {
         "api-platform/schema-generator": "^3.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "hautelook/alice-bundle": "^2.9",
         "justinrainbow/json-schema": "^5.2",
         "phpunit/phpunit": "^9.5",
