@@ -88,7 +88,7 @@ const Login = (props) => {
         initialValues={{username: "admin@emircanerkul.com", password: "admin"}}
         render={({handleSubmit}) => (
           <form onSubmit={handleSubmit} noValidate>
-            <div className={classes.hint}>Hint: admin@emircanerkul.com / admin</div>
+            <div className={classes.hint}>Hint (ROLE_ADMIN): admin@emircanerkul.com / admin<br />Hint (ROLE_USER): user@emircanerkul.com / user</div>
             <div className={classes.form}>
               <div className={classes.input}>
                 <Field
