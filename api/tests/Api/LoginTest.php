@@ -15,7 +15,7 @@ class LoginTest extends ApiTestCase
         $client = self::createClient();
         $user = new User();
         $user->setEmail('test@example.com');
-        $this->assertResponseIsSuccessful($this->getContainer()->get('security.password_encoder')->encodePassword($user, '$3CR3T'));
+
         $user->setPassword(
             $this->getContainer()->get('security.password_encoder')->encodePassword($user, '$3CR3T')
         );
