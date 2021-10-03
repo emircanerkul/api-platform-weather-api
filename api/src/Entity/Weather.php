@@ -11,6 +11,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => ['weather:read']],
     denormalizationContext: ['groups' => ['weather:write']],
+    collectionOperations: [
+        "get",
+        "post" => ["security" => "is_granted('ROLE_ADMIN')"]
+    ],
+    itemOperations: [
+        "get",
+        "put" => ["security" => "is_granted('ROLE_ADMIN')"],
+        "delete" => ["security" => "is_granted('ROLE_ADMIN')"],
+        "patch" => ["security" => "is_granted('ROLE_ADMIN')"],
+    ],
 )]
 class Weather
 {
@@ -22,28 +32,7 @@ class Weather
 
     #[ORM\Column(type: 'float')]
     #[Groups(['weather:read', 'weather:write'])]
-    private $lon;
-
-    #[ORM\Column(type: 'float')]
-    #[Groups(['weather:read', 'weather:write'])]
-    private $lat;
-
-    #[ORM\Column(type: 'string', length: 64)]
-    #[Groups(['weather:read', 'weather:write'])]
-    private $weather;
-
-    #[ORM\Column(type: 'float')]
-    #[Groups(['weather:read', 'weather:write'])]
     private $temp;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['weather:read', 'weather:write'])]
-    private $name;
-
-    #[ORM\ManyToOne(targetEntity: City::class, inversedBy: 'weather')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['weather:read'])]
-    private $city;
 
     #[ORM\ManyToOne(targetEntity: County::class, inversedBy: 'weather')]
     #[ORM\JoinColumn(nullable: false)]
@@ -55,45 +44,12 @@ class Weather
     #[Groups(['weather:read', 'weather:write'])]
     private $status;
 
+    #[ORM\Column(type: 'datetime')]
+    private $date;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLon(): ?float
-    {
-        return $this->lon;
-    }
-
-    public function setLon(float $lon): self
-    {
-        $this->lon = $lon;
-
-        return $this;
-    }
-
-    public function getLat(): ?float
-    {
-        return $this->lat;
-    }
-
-    public function setLat(float $lat): self
-    {
-        $this->lat = $lat;
-
-        return $this;
-    }
-
-    public function getWeather(): ?string
-    {
-        return $this->weather;
-    }
-
-    public function setWeather(string $weather): self
-    {
-        $this->weather = $weather;
-
-        return $this;
     }
 
     public function getTemp(): ?float
@@ -104,30 +60,6 @@ class Weather
     public function setTemp(float $temp): self
     {
         $this->temp = $temp;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(?City $city): self
-    {
-        $this->city = $city;
 
         return $this;
     }
@@ -152,6 +84,18 @@ class Weather
     public function setStatus(?WeatherStatus $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

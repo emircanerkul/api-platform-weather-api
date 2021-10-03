@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,6 +15,16 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[ApiResource(
     normalizationContext: ['groups' => ['city:read']],
     denormalizationContext: ['groups' => ['city:write']],
+    collectionOperations: [
+        "get",
+        "post" => ["security" => "is_granted('ROLE_ADMIN')"]
+    ],
+    itemOperations: [
+        "get",
+        "put" => ["security" => "is_granted('ROLE_ADMIN')"],
+        "delete" => ["security" => "is_granted('ROLE_ADMIN')"],
+        "patch" => ["security" => "is_granted('ROLE_ADMIN')"],
+    ],
 )]
 class City
 {
@@ -30,16 +41,12 @@ class City
 
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: County::class)]
     #[Groups(['city:read'])]
+    #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     private $counties;
-
-    #[ORM\OneToMany(mappedBy: 'city', targetEntity: Weather::class)]
-    #[Groups(['city:read'])]
-    private $weather;
 
     public function __construct()
     {
         $this->counties = new ArrayCollection();
-        $this->weather = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -83,36 +90,6 @@ class City
             // set the owning side to null (unless already changed)
             if ($county->getCity() === $this) {
                 $county->setCity(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Weather[]
-     */
-    public function getWeather(): Collection
-    {
-        return $this->weather;
-    }
-
-    public function addWeather(Weather $weather): self
-    {
-        if (!$this->weather->contains($weather)) {
-            $this->weather[] = $weather;
-            $weather->setCity($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWeather(Weather $weather): self
-    {
-        if ($this->weather->removeElement($weather)) {
-            // set the owning side to null (unless already changed)
-            if ($weather->getCity() === $this) {
-                $weather->setCity(null);
             }
         }
 

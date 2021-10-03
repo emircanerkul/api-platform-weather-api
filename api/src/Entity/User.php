@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,6 +21,16 @@ use Symfony\Component\Validator\Constraints\Email;
 #[ApiResource(
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
+    collectionOperations: [
+        "get",
+        "post" => ["security" => "is_granted('ROLE_ADMIN')"]
+    ],
+    itemOperations: [
+        "get" => ["security" => "is_granted('ROLE_ADMIN') or object.getEmail() == user.getEmail()"],
+        "put" => ["security" => "is_granted('ROLE_ADMIN') or object.getEmail() == user.getEmail()"],
+        "delete" => ["security" => "is_granted('ROLE_ADMIN')"],
+        "patch" => ["security" => "is_granted('ROLE_ADMIN') or object.getEmail() == user.getEmail()"],
+    ],
 )]
 #[UniqueEntity(['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -55,6 +66,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
+    #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     public function setEmail(string $email): void
     {
         $this->email = $email;
@@ -97,6 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @param array<int, string> $roles
      */
+    #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     public function setRoles(array $roles): void
     {
         $this->roles = $roles;
@@ -105,6 +118,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * {@inheritdoc}
      */
+    #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     public function getSalt(): ?string
     {
         return null;

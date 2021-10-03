@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CountyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,6 +14,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => ['county:read']],
     denormalizationContext: ['groups' => ['county:write']],
+    collectionOperations: [
+        "get",
+        "post" => ["security" => "is_granted('ROLE_ADMIN')"]
+    ],
+    itemOperations: [
+        "get",
+        "put" => ["security" => "is_granted('ROLE_ADMIN')"],
+        "delete" => ["security" => "is_granted('ROLE_ADMIN')"],
+        "patch" => ["security" => "is_granted('ROLE_ADMIN')"],
+    ],
 )]
 class County
 {
@@ -21,6 +32,14 @@ class County
     #[ORM\Column(type: 'integer')]
     #[Groups(['county:read'])]
     private $id;
+
+    #[ORM\Column(type: 'float')]
+    #[Groups(['county:read', 'county:write'])]
+    private $lon;
+
+    #[ORM\Column(type: 'float')]
+    #[Groups(['county:read', 'county:write'])]
+    private $lat;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['county:read', 'county:write'])]
@@ -32,7 +51,7 @@ class County
     private $city;
 
     #[ORM\OneToMany(mappedBy: 'county', targetEntity: Weather::class)]
-    #[Groups(['county:read'])]
+    #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     private $weather;
 
     public function __construct()
@@ -43,6 +62,30 @@ class County
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getLon(): ?float
+    {
+        return $this->lon;
+    }
+
+    public function setLon(float $lon): self
+    {
+        $this->lon = $lon;
+
+        return $this;
+    }
+
+    public function getLat(): ?float
+    {
+        return $this->lat;
+    }
+
+    public function setLat(float $lat): self
+    {
+        $this->lat = $lat;
+
+        return $this;
     }
 
     public function getTitle(): ?string
