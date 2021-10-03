@@ -4,7 +4,7 @@ import { ENTRYPOINT } from "config/entrypoint";
 export default {
   login: ({ username, password }) => {
     const request = new Request(
-      `${ENTRYPOINT}/authentication_token`,
+      `${ENTRYPOINT}/api/authentication_token`,
       {
         method: "POST",
         body: JSON.stringify({ email: username, password }),

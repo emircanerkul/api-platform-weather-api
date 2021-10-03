@@ -21,10 +21,23 @@ api_platform:
             apiKey:
                 name: Authorization
                 type: header
+    graphql:
+        enabled: true
+        default_ide: "graphiql"
+        graphiql:
+            enabled: true
+        graphql_playground:
+            enabled: true
+        nesting_separator: _
+        collection:
+            pagination:
+                enabled: true
+
     # Mercure integration, remove if unwanted
     mercure: ~
     # Good cache defaults for REST APIs
     defaults:
+        route_prefix: /api
         stateless: true
         cache_headers:
             vary: ["Content-Type", "Authorization", "Origin"]

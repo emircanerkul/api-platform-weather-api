@@ -30,7 +30,7 @@ security:
             stateless: true
             provider: chain_provider
             json_login:
-                check_path: /authentication_token
+                check_path: /api/authentication_token
                 username_path: email
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
@@ -49,5 +49,5 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/docs, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/authentication_token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/authentication_token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
