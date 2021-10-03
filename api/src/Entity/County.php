@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use App\Controller\GetWeatherController;
 use App\Repository\CountyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -51,7 +52,7 @@ class County
     private $city;
 
     #[ORM\OneToMany(mappedBy: 'county', targetEntity: Weather::class)]
-    #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
+    #[ApiSubresource()]
     private $weather;
 
     public function __construct()
