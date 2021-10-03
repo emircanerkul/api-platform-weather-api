@@ -26,6 +26,8 @@ class CityCountyFixtures extends Fixture
             foreach ($countyValues as $countyValue) {
                 $county = new County();
                 $county->setTitle($countyValue);
+                $county->setLat(0);
+                $county->setLon(0);
                 $manager->persist($county);
                 $city->addCounty($county);
             }
