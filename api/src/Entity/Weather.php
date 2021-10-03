@@ -2,7 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\WeatherRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,6 +27,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "patch" => ["security" => "is_granted('ROLE_ADMIN')"],
     ],
 )]
+#[ApiFilter(RangeFilter::class, properties: ['county.lon', 'county.lat'])] // @Todo: Make radius based filter and contrubute to open source.
+#[ApiFilter(SearchFilter::class, properties: ['status.title' => 'ipartial', 'name' => 'partial'])]
+#[ApiFilter(DateFilter::class, properties: ['date'])]
+#[ApiFilter(OrderFilter::class)]
 class Weather
 {
     #[ORM\Id]

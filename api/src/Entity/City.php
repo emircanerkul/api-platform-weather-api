@@ -2,8 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use App\Repository\CityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,6 +30,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         "patch" => ["security" => "is_granted('ROLE_ADMIN')"],
     ],
 )]
+#[ApiFilter(RangeFilter::class, properties: ['counties.weather.temp'])] // Cidden harikaymis ^^ filtre yapmak bu kadar kolay :)
+#[ApiFilter(DateFilter::class, properties: ['counties.weather.date'])]
+#[ApiFilter(OrderFilter::class)]
 class City
 {
     #[ORM\Id]

@@ -2,9 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
-use App\Controller\GetWeatherController;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\CountyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,6 +30,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "patch" => ["security" => "is_granted('ROLE_ADMIN')"],
     ],
 )]
+#[ApiFilter(RangeFilter::class, properties: ['lon', 'lat'])]
+#[ApiFilter(SearchFilter::class, properties: ['weather.status.title' => 'ipartial', 'name' => 'partial'])] // WOOOOW didim ^^
+#[ApiFilter(DateFilter::class, properties: ['counties.weather.date'])]
+#[ApiFilter(OrderFilter::class)]
 class County
 {
     #[ORM\Id]

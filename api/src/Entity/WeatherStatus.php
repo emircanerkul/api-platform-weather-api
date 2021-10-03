@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\WeatherStatusRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,6 +25,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "patch" => ["security" => "is_granted('ROLE_ADMIN')"],
     ],
 )]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'ipartial'])]
+#[ApiFilter(OrderFilter::class)]
 class WeatherStatus
 {
     #[ORM\Id]
