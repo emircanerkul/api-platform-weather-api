@@ -17,9 +17,9 @@ Each minute inserts almost 1000 random weather data.
 
 For short time I deploy this project. You can access it with full authentication.
 
-Swagger: https://api-platform-weather-api.emircanerkul.com/docs
-Redoc: https://api-platform-weather-api.emircanerkul.com/docs?ui=re_doc
-Admin Panel: https://api-platform-weather-api.emircanerkul.com/admin#/login (need to refresh after logged in)
+- Swagger: https://api-platform-weather-api.emircanerkul.com/docs
+- Redoc: https://api-platform-weather-api.emircanerkul.com/docs?ui=re_doc
+- Admin Panel: https://api-platform-weather-api.emircanerkul.com/admin#/login (need to refresh after logged in)
 
 ```yaml
 Admin: 
