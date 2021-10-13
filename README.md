@@ -6,8 +6,8 @@ On this project symfony's data fixtures, doctrine migrations, data persisters, c
 
 #### Bulding this project as easy as writing 2 commands thanks to [docker](https://www.docker.com/)
 
-`docker-compose build`
-`docker-compose up -d`
+- `docker-compose build`
+- `docker-compose up -d`
 
 ##### The custom command is for simulating real situations and testing server capacity.
 
